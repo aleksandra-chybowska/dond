@@ -82,7 +82,7 @@ module DOND_Game
 	def assignvaluestoboxes
 			b = @values.sample
 			@sequence.map! {|x| x == 0 ? b : x}
-			if @sequence.uniq.length!=@sequence.length
+			if @sequence.uniq.length != @sequence.length
 				a=@sequence.detect { |e| @sequence.count(e) > 1 }
 				@sequence.map! {|x| x == a ? b : x}
 			else
