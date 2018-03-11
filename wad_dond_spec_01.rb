@@ -8,13 +8,13 @@
 # See http://rspec.codeschool.com/levels/1 for help about RSpec
 # https://en.wikipedia.org/wiki/Wheel_of_Fortune_(UK_game_show)
 require "#{File.dirname(__FILE__)}/wad_dond_gen_01"
-
+require 'pp'
 # predefined method - NOT to be removed
 def check_valid(secret)
 	@game.secret = secret
 	sarray = []
 	i = 0
-	secret.split('').each do|c| 
+	secret.split('').each do |c| 
 		sarray[i] = c
 		i=i+1
 	end
@@ -37,7 +37,7 @@ module DOND_Game
 				@game.start
 			end
 			it "should contain a method created_by which returns the students name" do
-				studentname = "Nassr Al-Emrani"			# -----Change text to your own name-----
+				studentname = "Nassr Al-Emrani, Aleksandra Siudyka"			# -----Change text to your own name-----
 				@game.created_by.should == studentname		
 			end
 			it "should display a message showing who designed the game when the method start called" do
@@ -45,7 +45,7 @@ module DOND_Game
 				@game.start
 			end
 			it "should contain a method student_id which returns the students ID number" do
-				studentid = "51771025"				# -----Change text to your own student ID-----
+				studentid = "51771025, 51659859"				# -----Change text to your own student ID-----
 				@game.student_id.should == studentid
 			end
 			it "should display a message showing the id of the student when the method start called" do
@@ -122,7 +122,7 @@ module DOND_Game
 					s = "_"
 					g = "_"
 					b = i + 1
-#					@output.should_receive(:puts).with("Box #{b}: [#{b}] Status: #{@game.openedboxes[i]}")
+					# @output.should_receive(:puts).with("Box #{b}: [#{b}] Status: #{@game.openedboxes[i]}")
 					if @game.openedboxes[i] == 0
 						s = "Closed"
 						g = "[#{b}]"
@@ -130,7 +130,7 @@ module DOND_Game
 						s = "Opened"
 						g = "|#{b}|"
 					end
-					@output.should_receive(:print).with("#{g} ")					
+					@output.should_receive(:print).with("#{g} ")			
 				end
 				@game.showboxes
 			end
