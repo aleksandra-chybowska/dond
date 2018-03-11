@@ -79,7 +79,11 @@ module DOND_Game
 	end
 	
 	def boxvalid(g)
-		guess = g.to_i
+		begin
+			guess = Integer(g)
+		rescue ArgumentError
+			return 1
+		end
 		return guess > 0 && guess <= 22 ? 0 : 1
 	end
 
@@ -95,11 +99,11 @@ module DOND_Game
 				symbol = "|#{i}|"
 			end
 
-			if i == @chosenbox
+			if i == @chosenbox #integer!
 				symbol = "*#{i}*"
 			end
 
-			output.puts "Box #{i}: Status: #{status} "
+			# output.puts "Box #{i}: Status: #{status} "
 			output.print "#{symbol} "
 		end
 	end
@@ -176,7 +180,7 @@ module DOND_Game
 	end
 	
 	def openbox(guess)
-		openedboxes[guess.to_i] = 1
+		openedboxes[guess.to_i - 1] = 1
 		__displayhelper
 	end
 	
@@ -188,6 +192,11 @@ module DOND_Game
 		return value/2
 	end
 	
+	def bankercalculation
+		return 1000
+	end
+
+
 	def numberofboxesclosed
 		openedboxes.reject{ |o| o != 0 }.length
 	end
