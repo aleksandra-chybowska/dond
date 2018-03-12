@@ -17,44 +17,80 @@ module DOND_Game
 		g.assignvaluestoboxes
 		g.showboxes
 		@output.puts "\n"
+		chosenbox = self.validateandchoose(g, "primary")
+		g.setchosenbox(chosenbox)
+	end
 
-		while g.getchosenbox == 0
-			g.displaychosenboxprompt
-			chosenbox = g.getinput
-			
-			if g.boxvalid(chosenbox) == 0
-				g.setchosenbox(chosenbox)
+	def self.deal(g, money)
+		@output.puts "DEAL!"
+		@output.puts "Congratulations! You have won #{money} pounds!"
+		@output.puts "\n"
+		self.newgame(g)
+	end
+
+	def self.win(g, box)
+		@output.print "Congratulations! You have won content of the box no #{box}"
+		box = box.to_i - 1
+		@output.print "#{g.sequence[box]}"
+		g.showamounts
+		@output.puts "\n"
+		self.newgame(g)
+	end
+
+	def self.validateandchoose(g, promptkind)
+		box = -1
+		forbidden = ['']
+
+		while box == -1
+			if promptkind == "select"
+				g.displayselectboxprompt
+				forbidden = [g.getchosenbox] + g.getopenedboxindex
 			else
+				g.displaychosenboxprompt
+			end
+
+			box = g.getinput
+
+			if promptkind == "select" && box == ''
+				return box
+			elsif g.boxvalid(box) == 1 || forbidden.include?(box.to_i - 1)
+				box = -1
 				g.displaychosenboxerror
-				# g.displaychosenbox
 			end
 			@output.puts "\n"
 		end
+		return box
 	end
 
 	def self.play(g)
-		g.showboxes
-		g.showselectedboxes
-		box = 0
-
-		while box == 0
-			g.displayselectboxprompt
-			box = g.getinput
-			
-			if g.boxvalid(box) == 1
-				box = 0
-				g.displaychosenboxerror
+		while true
+			g.showboxes
+			g.showselectedboxes
+			box = self.validateandchoose(g, "select")
+			if box == '' 
+				break 
 			end
-			@output.puts "\n"
+			g.storeguess(box)
+			g.openbox(box)
+			
+			offer = g.bankercalcsvalue(g.bankercalculation)
+			banker = g.bankerphoneswithvalue(offer)
+			@output.puts "#{banker}"
+			@output.puts "Do you accept the offer? Deal or not deal? [d/ND]: "
+			dec = g.getinput
+			
+			if dec == "D" || dec == "DEAL"
+				self.deal(g, banker)
+				break		
+			end
+
+			if g.numberofboxesclosed == 1
+				self.win(g, g.getchosenbox)
+				break
+			end
+
+			@output.puts "NO DEAL!"			
 		end
-
-		g.storeguess(box)
-		g.openbox(box)
-		offer = g.bankercalcsvalue(g.bankercalculation)
-		@output.puts "#{g.bankerphoneswithvalue(offer)}"
-
-		#implement better offer options
-
 	end
 
 	@input = STDIN

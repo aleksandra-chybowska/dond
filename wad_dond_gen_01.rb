@@ -99,11 +99,10 @@ module DOND_Game
 				symbol = "|#{i}|"
 			end
 
-			if i == @chosenbox #integer!
+			if i.to_s == @chosenbox
 				symbol = "*#{i}*"
 			end
 
-			# output.puts "Box #{i}: Status: #{status} "
 			output.print "#{symbol} "
 		end
 	end
@@ -130,6 +129,18 @@ module DOND_Game
 	def getchosenbox
 		return @chosenbox
 	end
+
+	def getopenedboxindex
+		indexes = []
+		
+		for i in (0..21) do
+			if @openedboxes[i] == 1
+				indexes.push(i)
+			end
+		end
+
+		return indexes
+	end
 	
 	def displaychosenbox
 		box = self.getchosenbox
@@ -147,6 +158,10 @@ module DOND_Game
 	
 	def displaychosenboxerror
 		output.puts "Error: Box number must be 1 to 22."
+	end
+
+	def alreadychosen
+		output.puts "Error. You cannot choose this box because it is your primary box."
 	end
 	
 	def __displayhelper 
