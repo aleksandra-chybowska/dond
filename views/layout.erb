@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="This is my new Wiki app" />
+  <meta name="keywords" content="wiki, test app, blog"/>
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" type="text/css" />
+  <title>Deal or no Deal</title> 
+
+  <style>
+    .themecolorbutton {
+      display:inline-block;
+      height:20px;
+      width:20px;
+    }
+  </style>
+</head>
+<body>
+  <section class="title" style="background-color:#<%= $backgroundcolor %>;">
+      <h1 class="pt-4 pb-4 mb-0">Deal or no Deal</h1>
+  </section>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">Home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/newgame">New Game</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/summary">Analysis</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Post Content Column -->
+      <div class="col-sm-8">
+      <div class="view_content">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; 2018: Al-Emrani, Nassr  (id: 51771025), Siudyka, Aleksandra  (id: 51659859)</p>
+        <p class="m-0 text-center text-white">Change Theme Color:
+          <a href="defbackground"><span class="badge btn-danger btn-group themecolorbutton" style="background-color:#17A2B8;"> </span></a>
+          <a href="bluebackground" ><span class="badge btn-primary btn-group themecolorbutton" > </span></a>
+          <a href="greenbackground"><span class="badge btn-success btn-group themecolorbutton"> </span></a>
+          <a href="orangebackground"><span class="badge btn-warning btn-group themecolorbutton"> </span></a>
+          <a href="redbackground"><span class="badge btn-danger btn-group themecolorbutton"> </span></a>
+       </p>
+     </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/jquery/jquery.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

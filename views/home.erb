@@ -1,0 +1,19 @@
+<div id="content">
+	<h2>Your chosen box is <%= @@g.chosenbox %></h2>
+	<h2>Chosen boxes: </h2>
+	<% for box in @@g.selectedboxes %>
+		<%= box %>
+	<% end %>
+	<br>
+	
+	<h3>Enter the number of the box you wish to open.</h3>
+	<form  class="mb-4" action="/" method="post" id="edit">
+		<select name="openbox">
+		<% for i in @@available do %>
+			<option value="<%= i %>"><%= i %></option>
+		<% end %>
+		</select>  
+	    <input class="btn-info btn mt-2" type="submit" value="open">
+	    <!-- <input type="hidden" name="_method" value="put" /> -->
+	</form>
+</div>

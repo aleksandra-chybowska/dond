@@ -1,0 +1,10 @@
+<h2>New game</h2>
+<form  class="mb-4" action="/newgame" method="post" id="edit">
+	<select name="chosenbox">
+		<% for i in 1..22 do %>
+			<option value="<%= i %>"><%= i %></option>
+		<% end %>
+	</select>  
+    <input class="btn-info btn mt-2" type="submit" value="Let's play">
+    <!-- <input type="hidden" name="_method" value="put" /> -->
+</form>   

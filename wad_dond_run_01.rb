@@ -2,7 +2,7 @@
 
 # Add any additional gems and global variables here
 require 'sinatra'		
-
+require 'pp'
 # The file where you are to write code to pass the tests must be present in the same folder.
 # See http://rspec.codeschool.com/levels/1 for help about RSpec
 require "#{File.dirname(__FILE__)}/wad_dond_gen_01"
@@ -146,19 +146,101 @@ module DOND_Game
 			end
 		end
 
-	# Any code added to command line game should be added above.
-	
+		# Any code added to command line game should be added above.
 		exit	# Does not allow command-line game to run code below relating to web-based version
 	end
+
+	# Sinatra routes
+	# Any code added to web-based game should be added below.
+	
 end
 # End modules
+@@g = DOND_Game::Game.new(STDIN, STDOUT)
+@@g.resetgame
+@@g.assignvaluestoboxes
 
-# Sinatra routes
+@@available = (1..22).to_a
 
-	# Any code added to web-based game should be added below.
+get '/' do
+	if @@g.chosenbox == 0
+		redirect '/newgame'
+	end
+	erb :home
+end
 
+post '/' do
+	box = params[:openbox]
+	@@g.storeguess(box)
+	@@g.openbox(box)
+	pp box
+	@@available.delete(box.to_i)
 
+	redirect '/deal'
+end
 
-	# Any code added to web-based game should be added above.
+get '/newgame' do
+	@@available = (1..22).to_a
+	@@g.resetgame	
+	@@g.assignvaluestoboxes
 
+	erb :newgame
+end
+
+post '/newgame' do
+	chosenbox = params[:chosenbox]
+	@@g.setchosenbox(chosenbox)
+	@@available.delete(chosenbox.to_i)
+	redirect '/'
+end
+
+get '/deal' do
+	@offer = @@g.bankercalcsvalue(@@g.bankercalculation)
+	
+	erb :deal
+end
+ 
+post '/deal' do
+	deal = params[:deal]
+	if deal == 1
+		redirect '/endofgame'
+	else
+		redirect '/'
+	end
+end
+
+get '/summary' do
+	erb :about
+end
+
+get '/endofgame' do
+	erb :about
+end
+
+get '/about' do
+	erb :about
+end
+
+def self.validateandchoose(g, promptkind)
+	box = -1
+	forbidden = ['']
+
+	while box == -1
+		if promptkind == "select"
+			g.displayselectboxprompt
+			forbidden = [g.getchosenbox.to_i-1] + g.getopenedboxindex
+		else
+			g.displaychosenboxprompt
+		end
+		box = g.getinput
+
+		if promptkind == "select" && box == ''
+			return box
+		elsif g.boxvalid(box) == 1 || forbidden.include?(box.to_i - 1)
+			box = -1
+			g.displaychosenboxerror
+		end
+	end
+	return box
+end
+# Any code added to web-based game should be added above.
 # End program
