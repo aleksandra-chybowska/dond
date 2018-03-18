@@ -113,7 +113,7 @@ module DOND_Game
 		for i in (0..10)
 			c1 = @amounts[col1 + i]
 			c2 = @amounts[col2 + i]
-			output.puts "#{c1}   #{c2}";
+			output.print "\n#{c1}\t#{c2}";
 		end
 	end
 	
@@ -182,6 +182,7 @@ module DOND_Game
 	end
 
 	def displayanalysis
+		self.clearScreen
 		output.puts "Game analysis..."
 		__displayhelper
 	end
@@ -204,13 +205,19 @@ module DOND_Game
 	end
 	
 	def bankercalcsvalue(value)
-		return value/2
+		return (value * 0.8).to_i
 	end
 	
 	def bankercalculation
-		return 1000
+		self.deleteAtPosition
+		return @sequence.inject(0, &:+)
 	end
 
+	def deleteAtPosition
+		@selectedboxes.each do |i|
+			@sequence[i.to_i - 1] = 0
+		end
+	end	
 
 	def numberofboxesclosed
 		openedboxes.reject{ |o| o != 0 }.length
@@ -229,6 +236,14 @@ module DOND_Game
 		output.puts "... game finished."
 	end
 	
+	def clearScreen
+	   puts "amit"
+	   if RUBY_PLATFORM =~ /win32|win64|\.NET|windows|cygwin|mingw32/i
+	      system('cls')
+	    else
+	      system('clear')
+	   end
+	end
 	
 #	
 #	puts displaymenu

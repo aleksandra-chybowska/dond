@@ -11,6 +11,7 @@ require "#{File.dirname(__FILE__)}/wad_dond_gen_01"
 module DOND_Game
 
 	def self.newgame(g)
+		g.clearScreen
 		g.start	
 		g.resetgame	
 		@output.puts "\n"
@@ -22,18 +23,22 @@ module DOND_Game
 	end
 
 	def self.deal(g, money)
+		g.clearScreen
 		@output.puts "DEAL!"
 		@output.puts "Congratulations! You have won #{money} pounds!"
-		@output.puts "\n"
+		@output.puts "\n\npress any key to continue..."
+		@input.gets
 		self.newgame(g)
 	end
 
 	def self.win(g, box)
-		@output.print "Congratulations! You have won content of the box no #{box}"
+		g.clearScreen
+		@output.print "Congratulations! You have won content of the box no #{box} "
 		box = box.to_i - 1
-		@output.print "#{g.sequence[box]}"
+		@output.print "#{g.sequence[box]} pounds"
 		g.showamounts
-		@output.puts "\n"
+		@output.puts "\n\npress any key to continue..."
+		@input.gets
 		self.newgame(g)
 	end
 
@@ -44,11 +49,10 @@ module DOND_Game
 		while box == -1
 			if promptkind == "select"
 				g.displayselectboxprompt
-				forbidden = [g.getchosenbox] + g.getopenedboxindex
+				forbidden = [g.getchosenbox.to_i-1] + g.getopenedboxindex
 			else
 				g.displaychosenboxprompt
 			end
-
 			box = g.getinput
 
 			if promptkind == "select" && box == ''
@@ -64,6 +68,7 @@ module DOND_Game
 
 	def self.play(g)
 		while true
+			g.clearScreen
 			g.showboxes
 			g.showselectedboxes
 			box = self.validateandchoose(g, "select")
@@ -75,12 +80,12 @@ module DOND_Game
 			
 			offer = g.bankercalcsvalue(g.bankercalculation)
 			banker = g.bankerphoneswithvalue(offer)
-			@output.puts "#{banker}"
+			# @output.puts "#{offer}"
 			@output.puts "Do you accept the offer? Deal or not deal? [d/ND]: "
 			dec = g.getinput
 			
 			if dec == "D" || dec == "DEAL"
-				self.deal(g, banker)
+				self.deal(g, offer)
 				break		
 			end
 
@@ -104,6 +109,7 @@ module DOND_Game
 	turn = 0
 	win = 0
 	deal = 0
+	g.clearScreen
 	@output.puts "\n" + '-------------------------------------------------------------------------' + "\n"
 	@output.puts "\n" + 'Enter "1" runs game in command-line window or "2" runs it in web browser.' + "\n"
 	@output.puts "\n" + '-------------------------------------------------------------------------' + "\n"
