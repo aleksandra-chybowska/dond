@@ -7,12 +7,15 @@ require 'pp'
 # See http://rspec.codeschool.com/levels/1 for help about RSpec
 require "#{File.dirname(__FILE__)}/wad_dond_gen_01"
 
+enable :sessions
+
 # Main program
 module DOND_Game
 
 	def self.newgame(g)
 		g.clearScreen
-		g.start	
+		g.start
+		@output.puts "New game..."
 		g.resetgame	
 		@output.puts "\n"
 		g.assignvaluestoboxes
@@ -155,14 +158,13 @@ module DOND_Game
 	
 end
 # End modules
-@@g = DOND_Game::Game.new(STDIN, STDOUT)
-@@g.resetgame
-@@g.assignvaluestoboxes
 
 @@available = (1..22).to_a
+@first = 0
+@number = 0
 
 get '/' do
-	if @@g.chosenbox == 0
+	if session['game'] == nil
 		redirect '/newgame'
 	end
 	erb :home
@@ -170,39 +172,46 @@ end
 
 post '/' do
 	box = params[:openbox]
-	@@g.storeguess(box)
-	@@g.openbox(box)
-	pp box
+	session['game'].storeguess(box)
+	session['game'].openboxsimple(box)
+	session['recent'] = box
 	@@available.delete(box.to_i)
 
 	redirect '/deal'
 end
 
 get '/newgame' do
-	@@available = (1..22).to_a
-	@@g.resetgame	
-	@@g.assignvaluestoboxes
-
+	session['game'] = DOND_Game::Game.new(nil, nil)
+	session['game'].resetgame
+	session['game'].assignvaluestoboxes
+	session['recent'] = 0
 	erb :newgame
 end
 
 post '/newgame' do
 	chosenbox = params[:chosenbox]
-	@@g.setchosenbox(chosenbox)
+	session['game'].setchosenbox(chosenbox)
 	@@available.delete(chosenbox.to_i)
 	redirect '/'
 end
 
 get '/deal' do
-	@offer = @@g.bankercalcsvalue(@@g.bankercalculation)
-	
+	@offer = session['game'].bankercalcsvalue(session['game'].bankercalculation)
+	@number = session['recent']
+	@value = session['game'].getboxvalue(@number)
 	erb :deal
 end
  
 post '/deal' do
-	deal = params[:deal]
-	if deal == 1
-		redirect '/endofgame'
+	@deal = params[:deal]
+	if @deal == "1"
+		@number = 0
+		@value = session['game'].bankercalcsvalue(session['game'].bankercalculation)
+		erb :end
+	elsif session['game'].numberofboxesclosed == 1
+		@number = session['recent'].to_s
+		@value = session['game'].getboxvalue(@number.to_i).to_s
+		erb :end
 	else
 		redirect '/'
 	end
@@ -213,34 +222,12 @@ get '/summary' do
 end
 
 get '/endofgame' do
-	erb :about
+	erb :end
 end
 
 get '/about' do
 	erb :about
 end
 
-def self.validateandchoose(g, promptkind)
-	box = -1
-	forbidden = ['']
-
-	while box == -1
-		if promptkind == "select"
-			g.displayselectboxprompt
-			forbidden = [g.getchosenbox.to_i-1] + g.getopenedboxindex
-		else
-			g.displaychosenboxprompt
-		end
-		box = g.getinput
-
-		if promptkind == "select" && box == ''
-			return box
-		elsif g.boxvalid(box) == 1 || forbidden.include?(box.to_i - 1)
-			box = -1
-			g.displaychosenboxerror
-		end
-	end
-	return box
-end
 # Any code added to web-based game should be added above.
 # End program

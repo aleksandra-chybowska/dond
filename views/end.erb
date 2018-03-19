@@ -1,0 +1,5 @@
+<% if @deal == "1" %>
+	<h1>DEAL!</h1>
+<% end %>
+
+<p>Congratulations! You have won <% if @deal != "1"%>box <%= @number %><% end %> <%= @value %> pounds</p>

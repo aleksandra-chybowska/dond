@@ -1,7 +1,8 @@
-<h2>
+<h5>Box no <%= @number %>: <%= @value %></h5>
+<p>
 	Banker offers you for your chosen box: <%= @offer %> pounds<br>
 	Do you accept the offer? Deal or not deal?
-</h2>
+</p>
 <form  class="mb-4" action="/deal" method="post" id="edit">
 	yes
 	<input type="radio" name="deal" value="1">

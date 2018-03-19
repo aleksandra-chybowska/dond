@@ -1,12 +1,14 @@
 <div id="content">
-	<h2>Your chosen box is <%= @@g.chosenbox %></h2>
-	<h2>Chosen boxes: </h2>
-	<% for box in @@g.selectedboxes %>
-		<%= box %>
+	<h2>Your chosen box is <%= session['game'].chosenbox %></h2>
+	<h5>Selected boxes: </h5>
+	[
+	<% for box in session['game'].selectedboxes %>
+		<%= box %> (<%= session['game'].sequence[box.to_i-1] %>)
 	<% end %>
+	]
 	<br>
-	
-	<h3>Enter the number of the box you wish to open.</h3>
+	<br>
+	<h5>Please enter the number of the box you wish to open.</h5>
 	<form  class="mb-4" action="/" method="post" id="edit">
 		<select name="openbox">
 		<% for i in @@available do %>

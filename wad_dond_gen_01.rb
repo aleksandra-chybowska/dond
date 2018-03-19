@@ -57,7 +57,6 @@ module DOND_Game
 	end
 	
 	def resetgame
-		output.puts "New game..."
 		@sequence = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 		@selectedboxes = []
 		@openedboxes = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -125,6 +124,10 @@ module DOND_Game
 	def setchosenbox(b)
 		@chosenbox = b
 	end
+
+	def getboxvalue(b)
+		return @sequence[b.to_i - 1]
+	end
 	
 	def getchosenbox
 		return @chosenbox
@@ -157,7 +160,7 @@ module DOND_Game
 	end
 	
 	def displaychosenboxerror
-		output.puts "Error: Box number must be 1 to 22."
+		output.puts "Error: Box number must be 1 to 22 and it cannot be your primary box."
 	end
 
 	def alreadychosen
@@ -172,12 +175,14 @@ module DOND_Game
 			if @openedboxes[i-1] == 0
 				status = "Closed"
 				symbol = "[#{i}]"
+				amount = '';
 			else
 				status = "Opened"
 				symbol = "|#{i}|"
+				amount = "Value: #{@sequence[i-1]}"
 			end
 
-			output.puts "#{symbol} Status: #{status}"
+			output.puts "#{symbol} Status: #{status} #{amount}"
 		end
 	end
 
@@ -199,25 +204,29 @@ module DOND_Game
 		openedboxes[guess.to_i - 1] = 1
 		__displayhelper
 	end
+
+	def openboxsimple(guess)
+		openedboxes[guess.to_i - 1] = 1
+	end
 	
 	def bankerphoneswithvalue(offer)
 		output.puts "Banker offers you for your chosen box: #{offer}"
 	end
 	
 	def bankercalcsvalue(value)
-		return (value * 0.8).to_i
+		fraction = value.to_f / 650766.61
+		return (fraction * 250000.00 * 0.8).to_i
 	end
 	
 	def bankercalculation
-		self.deleteAtPosition
-		return @sequence.inject(0, &:+)
-	end
-
-	def deleteAtPosition
-		@selectedboxes.each do |i|
-			@sequence[i.to_i - 1] = 0
+		sum = 0
+		for i in (0..21) do
+			if !@selectedboxes.include? i.to_s
+				sum = sum + @sequence[i]
+			end
 		end
-	end	
+		return sum
+	end
 
 	def numberofboxesclosed
 		openedboxes.reject{ |o| o != 0 }.length
