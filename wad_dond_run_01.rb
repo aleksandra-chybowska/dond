@@ -158,16 +158,59 @@ module DOND_Game
 	
 end
 # End modules
-
+$playersname=""
 @@available = (1..22).to_a
 @first = 0
 @number = 0
+$top5players = { "a" => 0, "b" => 0, "d" => 0 , "e" => 0, "f" => 0 }
 
+def readFileLog(filename)
+  info = ""
+  file = File.open(filename)
+  
+  file.each do |line|
+    info = info + line + '<br>'
+  end
+
+  file.close
+  return info
+end
 get '/' do
 	if session['game'] == nil
 		redirect '/newgame'
 	end
 	erb :home
+end
+
+def updateLog(username,dealvalue)
+	
+	info= "#{dealvalue} Pounds were won by #{username}"
+	file = File.open("log.txt", "a")
+	file.puts info
+	file.close
+	dealvalueasanintger= dealvalue.to_i
+	if dealvalue > $top5players.values[0][0]
+		$top5players.values[0][0] = dealvalueasanintger
+		$top5players.key[0] = username
+		
+	elsif dealvalue > $top5players.values[1][0]
+		$top5players.value[1][0] = dealvalueasanintger
+		$top5players.key[1] = username
+		
+	elsif dealvalue > $top5players.values[2][0]
+		$top5players.values[2][0] = dealvalueasanintger
+		$top5players.keys[2] = username
+		
+	elsif dealvalue > $top5players.values[3][0]
+		$top5players.values[3][0] = dealvalueasanintger
+		$top5players.keys[3] = username
+		
+	elsif dealvalue > $top5players.values[4][0]
+		$top5players.values[4][0] = dealvalueasanintger
+		$top5players.keys[4] = username
+	else
+	end
+		
 end
 
 post '/' do
@@ -190,6 +233,7 @@ end
 
 post '/newgame' do
 	chosenbox = params[:chosenbox]
+	$playersname = params[:playersname]
 	session['game'].setchosenbox(chosenbox)
 	@@available.delete(chosenbox.to_i)
 	redirect '/'
@@ -207,6 +251,7 @@ post '/deal' do
 	if @deal == "1"
 		@number = 0
 		@value = session['game'].bankercalcsvalue(session['game'].bankercalculation)
+		updateLog($playersname,@value)
 		erb :end
 	elsif session['game'].numberofboxesclosed == 1
 		@number = session['recent'].to_s
@@ -228,6 +273,37 @@ end
 get '/about' do
 	erb :about
 end
+get '/bluebackground' do
+  $backgroundcolor="007996"
+  redirect '/'
+end
+get '/greenbackground' do
+  $backgroundcolor="668d3c"
+  redirect '/'
+end
+
+get '/orangebackground' do
+  $backgroundcolor="ff8642"
+  redirect '/'
+end
+
+get '/redbackground' do
+  $backgroundcolor="c0362c"
+  redirect '/'
+end
+get '/defbackground' do
+  $backgroundcolor="17A2B8"
+  redirect '/'
+end
+get '/showlog' do
+  @log  = readFileLog("log.txt").chomp  
+  erb :showlog
+end
+
+get '/top5players' do
+	erb :top5players
+end
+
 
 # Any code added to web-based game should be added above.
 # End program

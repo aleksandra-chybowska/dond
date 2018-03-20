@@ -254,10 +254,7 @@ module DOND_Game
 	   end
 	end
 	
-#	
-#	puts displaymenu
-#	puts resetgame
-#	showboxes
+
 
 
 		# Any code/methods aimed at passing the RSpect tests should be added above.
