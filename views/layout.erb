@@ -49,19 +49,32 @@
     </div>
   </nav>
 
-  <!-- Page Content -->
-  <div class="container">
-    <div class="row">
-      <!-- Post Content Column -->
-      <div class="col-sm-12">
-      <div class="view_content">
-          <%= yield %>
+    <!-- Page Content -->
+    <div class="container">
+      <div class="row">
+        <!-- Sidebar Widgets Column -->
+        <div class="col-sm-4">
+          <!-- Side Widget -->
+          <% filename='log.txt'
+          linecount=%x{wc -l #{filename}}.split.first.to_i  %>
+          <div class="card my-4">
+            <h5 class="card-header">Word Count Widget</h5>
+            <div class="card-body">
+              <strong>Tally of All games played</strong> <%= linecount %> <br>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post Content Column -->
+        <div class="col-sm-8">
+        <div class="view_content">
+            <%= yield %>
+          </div>
         </div>
       </div>
+      <!-- /.row -->
     </div>
-    <!-- /.row -->
-  </div>
-  <!-- /.container -->
+    <!-- /.container -->
 
   <footer class="py-5 bg-dark">
     <div class="container">
