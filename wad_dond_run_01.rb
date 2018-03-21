@@ -3,7 +3,6 @@
 # Add any additional gems and global variables here
 require 'sinatra'		
 require 'pp'
-require 'builder'
 
 # The file where you are to write code to pass the tests must be present in the same folder.
 # See http://rspec.codeschool.com/levels/1 for help about RSpec
