@@ -3,6 +3,8 @@
 # Add any additional gems and global variables here
 require 'sinatra'		
 require 'pp'
+require 'builder'
+
 # The file where you are to write code to pass the tests must be present in the same folder.
 # See http://rspec.codeschool.com/levels/1 for help about RSpec
 require "#{File.dirname(__FILE__)}/wad_dond_gen_01"
@@ -162,7 +164,21 @@ $playersname=""
 @@available = (1..22).to_a
 @first = 0
 @number = 0
-$top5players = { "a" => 0, "b" => 0, "d" => 0 , "e" => 0, "f" => 0 }
+$loghash = Hash[File.read('log.txt').scan(/(.+?), (.+)/)]
+
+$top5players=$loghash.sort_by{ |k, v| v }.to_h
+
+$player1key = $top5players.keys[0]
+$player1value = $top5players.values[0].to_i
+$player2key = $top5players.keys[1]
+$player2value = $top5players.values[1].to_i
+$player3key = $top5players.keys[2]
+$player3value = $top5players.values[2].to_i
+$player4key = $top5players.keys[3]
+$player4value = $top5players.values[3].to_i
+$player5key = $top5players.keys[4]
+$player5value = $top5players.values[4].to_i
+
 
 def readFileLog(filename)
   info = ""
@@ -184,33 +200,10 @@ end
 
 def updateLog(username,dealvalue)
 	
-	info= "#{dealvalue} Pounds were won by #{username}"
+	info= "#{username}, #{dealvalue} "
 	file = File.open("log.txt", "a")
 	file.puts info
 	file.close
-	dealvalueasanintger= dealvalue.to_i
-	if dealvalue > $top5players.values[0][0]
-		$top5players.values[0][0] = dealvalueasanintger
-		$top5players.key[0] = username
-		
-	elsif dealvalue > $top5players.values[1][0]
-		$top5players.value[1][0] = dealvalueasanintger
-		$top5players.key[1] = username
-		
-	elsif dealvalue > $top5players.values[2][0]
-		$top5players.values[2][0] = dealvalueasanintger
-		$top5players.keys[2] = username
-		
-	elsif dealvalue > $top5players.values[3][0]
-		$top5players.values[3][0] = dealvalueasanintger
-		$top5players.keys[3] = username
-		
-	elsif dealvalue > $top5players.values[4][0]
-		$top5players.values[4][0] = dealvalueasanintger
-		$top5players.keys[4] = username
-	else
-	end
-		
 end
 
 post '/' do

@@ -1,5 +1,6 @@
-158479 Pounds were won by Nassr
-173846 Pounds were won by Enter the players name
-170772 Pounds were won by Enter the players name
-172924 Pounds were won by Jonnny
-163089 Pounds were won by Enter the players name
+Ls, 173815 
+John, 173843 
+Jane, 173844 
+Lss, 173815 
+Johns, 173843 
+Janes, 173844 
