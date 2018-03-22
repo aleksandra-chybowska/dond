@@ -1,7 +1,7 @@
 <h2>New game</h2>
 <p>Please select the number of the box you wish to keep.</p>
 <form  class="mb-4" action="/newgame" method="post" id="edit">
-	<textarea style="width: 100%; min-height: 20px" name="playersname" id="playersname">Enter the players name</textarea>
+	<textarea style="width: 100%; min-height: 20px" name="playersname" id="playersname" placeholder="Enter the players name"></textarea>
 	<select name="chosenbox">
 		<% for i in 1..22 do %>
 			<option value=<%= i %>><%= i %></option>

@@ -11,7 +11,7 @@
 	<h5>Please enter the number of the box you wish to open.</h5>
 	<form  class="mb-4" action="/" method="post" id="edit">
 		<select name="openbox">
-		<% for i in @@available do %>
+		<% for i in session['available'] do %>
 			<option value="<%= i %>"><%= i %></option>
 		<% end %>
 		</select>  

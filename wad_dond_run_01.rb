@@ -160,7 +160,6 @@ module DOND_Game
 end
 # End modules
 $playersname=""
-@@available = (1..22).to_a
 @first = 0
 @number = 0
 $loghash = Hash[File.read('log.txt').scan(/(.+?), (.+)/)]
@@ -207,10 +206,11 @@ end
 
 post '/' do
 	box = params[:openbox]
+	pp box
 	session['game'].storeguess(box)
 	session['game'].openboxsimple(box)
 	session['recent'] = box
-	@@available.delete(box.to_i)
+	session['available'].delete(box.to_i)
 
 	redirect '/deal'
 end
@@ -219,7 +219,8 @@ get '/newgame' do
 	session['game'] = DOND_Game::Game.new(nil, nil)
 	session['game'].resetgame
 	session['game'].assignvaluestoboxes
-	session['recent'] = 0
+	session['recent'] = -1
+	session['available'] = (1..22).to_a
 	erb :newgame
 end
 
@@ -227,7 +228,7 @@ post '/newgame' do
 	chosenbox = params[:chosenbox]
 	$playersname = params[:playersname]
 	session['game'].setchosenbox(chosenbox)
-	@@available.delete(chosenbox.to_i)
+	session['available'].delete(chosenbox.to_i)
 	redirect '/'
 end
 
@@ -246,7 +247,7 @@ post '/deal' do
 		updateLog($playersname,@value)
 		erb :end
 	elsif session['game'].numberofboxesclosed == 1
-		@number = session['recent'].to_s
+		@number = session['game'].getchosenbox.to_s
 		@value = session['game'].getboxvalue(@number.to_i).to_s
 		erb :end
 	else
