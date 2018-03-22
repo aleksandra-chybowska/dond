@@ -1,7 +1,9 @@
 # Ruby code file - All your code should be located between the comments provided.
-# Main class module
+# Main class module. Scaffold provided due to courtesy of Nigel Beacham (scaffold)
 module DOND_Game
 	# Input and output constants processed by subprocesses. MUST NOT change.
+
+
 	GOES = 5
 
 	class Game

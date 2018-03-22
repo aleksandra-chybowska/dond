@@ -6,13 +6,16 @@ require 'pp'
 
 # The file where you are to write code to pass the tests must be present in the same folder.
 # See http://rspec.codeschool.com/levels/1 for help about RSpec
+
+#DOND Game
 require "#{File.dirname(__FILE__)}/wad_dond_gen_01"
 
 enable :sessions
 
-# Main program
+# Main program - Author of the main scaffold: Dr Nigel Beacham, University of Aberdeen
 module DOND_Game
 
+	#reset variables
 	def self.newgame(g)
 		g.clearScreen
 		g.start
@@ -46,6 +49,7 @@ module DOND_Game
 		self.newgame(g)
 	end
 
+	#validation helper
 	def self.validateandchoose(g, promptkind)
 		box = -1
 		forbidden = ['']
@@ -206,7 +210,7 @@ end
 
 post '/' do
 	box = params[:openbox]
-	pp box
+	#store variables in a session so that each user visiting site gets his own instance of game
 	session['game'].storeguess(box)
 	session['game'].openboxsimple(box)
 	session['recent'] = box
@@ -246,7 +250,7 @@ post '/deal' do
 		@value = session['game'].bankercalcsvalue(session['game'].bankercalculation)
 		updateLog($playersname,@value)
 		erb :end
-	elsif session['game'].numberofboxesclosed == 1
+	elsif session['game'].numberofboxesclosed == 1 #win chosenbox
 		@number = session['game'].getchosenbox.to_s
 		@value = session['game'].getboxvalue(@number.to_i).to_s
 		erb :end
